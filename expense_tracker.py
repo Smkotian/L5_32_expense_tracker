@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 
 BANK_SYNC_PASSWORD = os.environ.get("BANK_SYNC_PASSWORD", "")
-MONTHLY_BUDGET = 20000
+CONFIG = {"monthly_budget": 20000}
 expenses = []
 REPORT_DIR = Path(tempfile.gettempdir()) / "expense_reports"
 
@@ -41,16 +41,15 @@ def total_by_category():
 
 def set_budget(new_budget):
     """Set the monthly spending budget."""
-    global MONTHLY_BUDGET
     if new_budget < 0:
         raise ValueError("Budget cannot be negative.")
-    MONTHLY_BUDGET = new_budget
+    CONFIG["monthly_budget"] = new_budget
 
 
 def remaining_budget():
     """Return the budget remaining after recorded expenses."""
     spent = sum(expense["amount"] for expense in expenses)
-    return MONTHLY_BUDGET - spent
+    return CONFIG["monthly_budget"] - spent
 
 
 def biggest_expense():
@@ -117,7 +116,7 @@ def main():
         "Summary:",
         len(expenses),
         "expenses recorded against a budget of",
-        MONTHLY_BUDGET,
+        CONFIG["monthly_budget"]
     )
 
 
